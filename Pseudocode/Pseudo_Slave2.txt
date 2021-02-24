@@ -1,0 +1,27 @@
+    Slave 2
+
+start setup:
+    config analog
+    config io
+    clear ports
+    config isp
+    config SPI
+end setup
+
+start isr:
+    if SSPIF:
+        save SSPBUF
+        set SSPIF
+    end
+end isr
+
+start main:
+    call setup
+    loop forever:
+        if Button_Up:
+        PORT++
+        if Button_Down:
+        Port--
+        read SPI
+        write SPI
+    end loop

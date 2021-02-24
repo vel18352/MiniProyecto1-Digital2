@@ -1,0 +1,41 @@
+    Slave 3
+
+start setup:
+    config analog
+    config io
+    clear ports
+    config isp
+    config SPI
+    config ADC
+end setup
+
+start isr:
+    if adc:
+        clear adif
+        convert adc data
+        set adif
+    end
+
+    if SSPIF:
+        save SSPBUF
+        set SSPIF
+    end
+end isr
+
+start main:
+    call setup
+    loop forever:
+        read ADC
+        call semaforo
+        read SPI
+        write SPI
+    end loop
+
+start semaforo:
+    if temp < 25:
+        luz verde = 1
+    if temp > 25 && temp <  36
+        luz amarilla = 1
+    if temp > 36
+        luz roja = 1
+end semaforo

@@ -1,0 +1,30 @@
+Slave 1
+
+start setup:
+    config analog
+    config io
+    clear ports
+    config isp
+    config SPI
+    config ADC
+end setup
+
+start isr:
+    if adc:
+        clear adif
+        set adif
+    end
+
+    if SSPIF:
+        save SSPBUF
+        set SSPIF
+    end
+end isr
+
+start main:
+    call setup
+    loop forever:
+        read ADC
+        read SPI
+        write SPI
+    end loop

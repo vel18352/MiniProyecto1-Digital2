@@ -1,0 +1,28 @@
+Master
+
+start setup:
+    config analog
+    config io
+    clear ports
+    config isp
+    config UART
+    config SPI
+    config LCD
+end setup
+
+start isr:
+    if SSPIF:
+        save SSPBUF
+        set SSPIF
+    end
+end isr
+
+start main:
+    call setup
+    loop forever:
+        clear display
+        read SPI
+        sprintf SPI data
+        write LCD
+        write TXREG
+    end loop
